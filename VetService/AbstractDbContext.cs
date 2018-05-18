@@ -54,8 +54,10 @@ namespace VetService
 
         public virtual DbSet<Order> Orders { get; set; }
 
-        public virtual DbSet<ServiceOrder> ServiceOrders { get; set; }
-
         public virtual DbSet<Service> Services { get; set; }
+
+        public virtual DbSet<Visit> Visit { get; set; }
+
+        public virtual DbSet<VisitService> VisitService { get; set; }
     }
 }

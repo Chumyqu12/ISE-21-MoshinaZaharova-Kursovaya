@@ -33,8 +33,7 @@ namespace VetService.VetImplementations
         {
             return await context.Clients.GroupJoin(
                 context.Orders.Where(rec => rec.OrderStatus != OrderStatus.Оплачен)
-                .Where(rec=>rec.DateCreate>=model.DateFrom && rec.DateCreate<=model.DateTo).Include(rec=>rec.Client)
-                .Include(rec => rec.Pays).Include(rec => rec.ServiceOrders),
+                .Where(rec=>rec.DateCreate>=model.DateFrom && rec.DateCreate<=model.DateTo).Include(rec=>rec.Client),
                 client => client,//возможно требуется include
                 order => order.Client,
                 (client, orderList) =>
@@ -46,8 +45,8 @@ namespace VetService.VetImplementations
                     OrderCredits = orderList.Select(rec => new OrderCreditViewModel
                     {
                         OrderId = rec.Id,
-                        Services = rec.ServiceOrders.Select(recO => new ServiceOrderViewModel {
-                            ServiceName = recO.Service.ServiceName,
+                        Services = rec.Order.Select(recO => new OrderViewModel {
+                            VisitName = recO.Service.ServiceName,
                             Count = recO.Count,
                             Price = recO.Price,
                             Total = recO.Count * recO.Price

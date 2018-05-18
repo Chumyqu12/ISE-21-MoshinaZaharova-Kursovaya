@@ -18,7 +18,7 @@ namespace VetModel
         [Required]
         public decimal Price { get; set; }
 
-        [ForeignKey("ServiceId")]
-        public virtual List<ServiceOrder> ServiceOrders { get; set; }
+        [ForeignKey("VisitId")]
+        public virtual List<VisitService> VisitService { get; set; }
     }
 }

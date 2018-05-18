@@ -24,8 +24,15 @@ namespace VetModel
         [ForeignKey("OrderId")]
         public virtual List<Pay> Pays { get; set; }
 
-        [ForeignKey("OrderId")]
-        public virtual List<ServiceOrder> ServiceOrders { get; set; }
+        public int VisitId { get; set; }
+
+        public int Count { get; set; }
+
+        public decimal Summa { get; set; }
+
+        public OrderStatus Status { get; set; }
+
+        public virtual Visit Visit { get; set; }
 
     }
 }

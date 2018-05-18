@@ -20,6 +20,12 @@ namespace VetService.VetBindingModels
         public DateTime CreditEnd { get; set; }
 
         [DataMember]
-        public List<ServiceOrderBindingModel> ServiceOrders { get; set; }
+        public int VisitId { get; set; }
+
+        [DataMember]
+        public int Count { get; set; }
+
+        [DataMember]
+        public decimal Summa { get; set; }
     }
 }

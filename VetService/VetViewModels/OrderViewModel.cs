@@ -41,9 +41,21 @@ namespace VetService.VetViewModels
         public decimal Credit { get; set; }
 
         [DataMember]
-        public List<ServiceOrderViewModel> ServiceOrders { get; set; }
+        public string VisitName { get; set; }
+
+        [DataMember]
+        public int VisitId { get; set; }
+
+        [DataMember]
+        public int Count { get; set; }
+
+        [DataMember]
+        public decimal Summa { get; set; }
 
         [DataMember]
         public DateTime CreditDate { get; set; }
+
+        [DataMember]
+        public decimal Total { get; set; }
     }
 }

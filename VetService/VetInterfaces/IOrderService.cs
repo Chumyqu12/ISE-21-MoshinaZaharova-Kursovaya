@@ -21,5 +21,11 @@ namespace VetService.VetInterfaces
         Task UpdElement(OrderBindingModel model);
 
         Task DelElement(int id);
+
+        void ChatPayOrder(int id);
+
+        void PayOrder(int id);
+
+        void FinishOrder(int id);
     }
 }

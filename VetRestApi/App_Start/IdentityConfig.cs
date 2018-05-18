@@ -21,6 +21,18 @@ namespace VetRestApi
         {
         }
 
+        public override async Task<ClaimsIdentity> CreateIdentityAsync(AppUser user, string authenticationType)
+        {
+            IList<Claim> claimCollection = new List<Claim>
+            {
+                new Claim(ClaimTypes.Name, user.UserName),
+                new Claim(ClaimTypes.Role, user.Id.Role.ToString()),
+            };
+            var claimsIdentity = new ClaimsIdentity(claimCollection, authenticationType);
+
+            return await Task.Run(() => claimsIdentity);
+        }
+
         public static ApplicationUserManager Create(IdentityFactoryOptions<ApplicationUserManager> options, IOwinContext context)
         {
             var manager = new ApplicationUserManager(new AppUserStore(context.Get<AbstractDbContext>(),AdminService.Create(context.Get<AbstractDbContext>()), ClientService.Create(context.Get<AbstractDbContext>())));

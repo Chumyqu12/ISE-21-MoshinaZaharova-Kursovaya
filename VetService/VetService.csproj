@@ -9,8 +9,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>VetService</RootNamespace>
     <AssemblyName>VetService</AssemblyName>
-    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -107,24 +108,28 @@
     <Compile Include="VetBindingModels\ReportBindingModel.cs" />
     <Compile Include="VetBindingModels\RetributionBindingModel.cs" />
     <Compile Include="VetBindingModels\ServiceBindingModel.cs" />
-    <Compile Include="VetBindingModels\ServiceOrderBindingModel.cs" />
+    <Compile Include="VetBindingModels\VisitBindingModel.cs" />
+    <Compile Include="VetBindingModels\VisitServiceBindingModel.cs" />
     <Compile Include="VetImplementations\AdminService.cs" />
     <Compile Include="VetImplementations\ClientService.cs" />
     <Compile Include="VetImplementations\OrderService.cs" />
     <Compile Include="VetImplementations\ReportService.cs" />
     <Compile Include="VetImplementations\ServiceService.cs" />
+    <Compile Include="VetImplementations\VisitService.cs" />
     <Compile Include="VetInterfaces\IAdminService.cs" />
     <Compile Include="VetInterfaces\IClientService.cs" />
     <Compile Include="VetInterfaces\IOrderService.cs" />
     <Compile Include="VetInterfaces\IReportService.cs" />
     <Compile Include="VetInterfaces\IServiceService.cs" />
+    <Compile Include="VetInterfaces\IVisitService.cs" />
     <Compile Include="VetViewModels\AdminViewModel.cs" />
     <Compile Include="VetViewModels\ClientCreaditViewModel.cs" />
     <Compile Include="VetViewModels\ClientViewModel.cs" />
     <Compile Include="VetViewModels\OrderViewModel.cs" />
     <Compile Include="VetViewModels\PayViewModel.cs" />
-    <Compile Include="VetViewModels\ServiceOrderViewModel.cs" />
     <Compile Include="VetViewModels\ServiceViewModel.cs" />
+    <Compile Include="VetViewModels\VisitServiceViewModel.cs" />
+    <Compile Include="VetViewModels\VisitViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

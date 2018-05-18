@@ -21,104 +21,42 @@ namespace VetService.VetImplementations
             this.context = context;
         }
 
-        public async Task AddElement(OrderBindingModel model)
+        public void AddElement(OrderBindingModel model)
         {
-            using (var transaction = context.Database.BeginTransaction())
+            context.Orders.Add(new Order
             {
-                try
-                {
-                    var element = new Order
-                    {
-                        ClientId = model.ClientId,
-                        DateCreate = DateTime.Now,
-                        CreditEnd = model.CreditEnd,
-                        OrderStatus = OrderStatus.Выполнен
-                    };
-                    context.Orders.Add(element);
-                    await context.SaveChangesAsync();
+                ClientId = model.ClientId,
+                VisitId = model.VisitId,
+                DateCreate = DateTime.Now,
+                Count = model.Count,
+                Summa = model.Summa,
+                
+            });
+            context.SaveChanges();
 
-                    var groupServices = model.ServiceOrders.GroupBy(rec => rec.ServiceId).Select(rec => new ServiceOrderBindingModel
-                    {
-                        ServiceId = rec.Key,
-                        Count = rec.Sum(r => r.Count)
-                    });
-                    foreach (var groupService in groupServices)
-                    {
-                        context.ServiceOrders.Add(new ServiceOrder
-                        {
-                            OrderId = element.Id,
-                            Count = groupService.Count,
-                            Price = context.Services.Where(rec => rec.Id == groupService.ServiceId).FirstOrDefault().Price,
-                            ServiceId = groupService.ServiceId
-                        });
-
-                    }
-                    await context.SaveChangesAsync();
-                    await Task.Run(() => transaction.Commit());
-                }
-                catch (Exception)
-                {
-                    await Task.Run(() => transaction.Rollback());
-                    throw;
-                }
-            }
         }
 
-        public async Task DelElement(int id)
-        {
-            using (var transaction = context.Database.BeginTransaction())
-            {
-                try
-                {
-                    Order element = await context.Orders.FirstOrDefaultAsync(rec => rec.Id == id);
-                    if (element != null)
-                    {
-                        context.ServiceOrders.RemoveRange(
-                                            context.ServiceOrders.Where(rec => rec.OrderId == id));
-                        context.Orders.Remove(element);
-                        await context.SaveChangesAsync();
-                    }
-                    else
-                    {
-                        throw new Exception("Элемент не найден");
-                    }
-                    await Task.Run(() => transaction.Commit());
-                }
-                catch (Exception)
-                {
-                    await Task.Run(() => transaction.Rollback());
-                    throw;
-                }
-            }
-        }
 
         public async Task<OrderViewModel> GetElement(int id)
         {
             Order element = await context.Orders.FirstOrDefaultAsync(rec => rec.Id == id);
             if (element != null)
             {
-                var serviceOrders = await context.ServiceOrders.Where(rec => rec.OrderId == element.Id).Include(rec => rec.Service).Select(rec => new ServiceOrderViewModel
-                {
-                    Id = rec.Id,
-                    ServiceName = rec.Service.ServiceName,
-                    Count = rec.Count,
-                    Price = rec.Price,
-                    Total = rec.Count * rec.Price
-                }).ToListAsync();
-                var sum = serviceOrders.Select(rec => rec.Total).DefaultIfEmpty(0).Sum();
-                var paid = context.Pays.Where(rec => rec.OrderId == element.Id).Select(rec => rec.Summ).DefaultIfEmpty(0).Sum();
-                return new OrderViewModel
+             
+               
+                var serviceOrders = await context.Orders.Where(rec => rec.Id == element.Id).Include(rec => rec.Visit).Select(rec => new OrderViewModel
                 {
                     Id = element.Id,
-                    ClientFIO = context.Clients.Where(rec => rec.Id == element.ClientId).Select(rec => rec.ClientFIO).FirstOrDefault(),
+                    ClientFIO = context.Clients.Where(recC => recC.Id == element.ClientId).Select(recC => recC.ClientFIO).FirstOrDefault(),
                     ClientId = element.ClientId,
                     DateCreate = element.DateCreate.ToLongDateString(),
                     CreditEnd = element.DateCreate.ToLongDateString(),
-                    ServiceOrders = serviceOrders,
+                    Id = rec.Id,
+                    VisitName = rec.Visit.VisitName,
+                    Count = rec.Count,
+                    Sum = rec.Summa,
+                    Total = rec.Count * rec.Summa,
                     OrderStatus = element.OrderStatus.ToString(),
-                    Sum = sum,
-                    Paid = paid,
-                    Credit = sum - paid,
                     CreditDate = element.CreditEnd
                 };
             }
@@ -142,6 +80,10 @@ namespace VetService.VetImplementations
                                             SqlFunctions.DateName("yyyy", rec.CreditEnd),
                     OrderStatus = rec.OrderStatus.ToString(),
                     CreditDate = rec.CreditEnd,
+                    Count=rec.Count,
+                    Sum=rec.Summa,
+                    VisitName=rec.Visit.VisitName,
+                    VisitId=rec.VisitId,
                     //Sum = rec.ServiceOrders.Select(r=>r.Price * r.Count).DefaultIfEmpty(0).Sum(),
                     //Paid = rec.Pays.Select(r=>r.Summ).DefaultIfEmpty(0).Sum(),
                     //Credit = rec.ServiceOrders.Select(r => r.Price * r.Count).DefaultIfEmpty(0).Sum() - rec.Pays.Select(r => r.Summ).DefaultIfEmpty(0).Sum()
@@ -169,6 +111,36 @@ namespace VetService.VetImplementations
                     Paid = rec.Pays.Select(r=>r.Summ).DefaultIfEmpty(0).Sum(),
                     Credit = rec.ServiceOrders.Select(r => r.Price * r.Count).DefaultIfEmpty(0).Sum() - rec.Pays.Select(r => r.Summ).DefaultIfEmpty(0).Sum()
                 }).ToListAsync();
+        }
+
+        public void FinishOrder(int id)
+        {
+            Order element = context.Orders.FirstOrDefault(rec => rec.Id == id);
+            if (element == null)
+            {
+                throw new Exception("Элемент не найден");
+            }
+            element.OrderStatus = OrderStatus.Выполнен;
+        }
+
+        public void PayOrder(int id)
+        {
+            Order element = context.Orders.FirstOrDefault(rec => rec.Id == id);
+            if (element == null)
+            {
+                throw new Exception("Элемент не найден");
+            }
+            element.OrderStatus = OrderStatus.Оплачен;
+        }
+
+        public void ChatPayOrder(int id)
+        {
+            Order element = context.Orders.FirstOrDefault(rec => rec.Id == id);
+            if (element == null)
+            {
+                throw new Exception("Элемент не найден");
+            }
+            element.OrderStatus = OrderStatus.Частично_оплачен;
         }
 
         public Task UpdElement(OrderBindingModel model)
