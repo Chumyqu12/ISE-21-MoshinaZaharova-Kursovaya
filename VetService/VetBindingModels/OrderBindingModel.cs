@@ -17,6 +17,9 @@ namespace VetService.VetBindingModels
         public int ClientId { get; set; }
 
         [DataMember]
+        public int Summa { get; set; }
+
+        [DataMember]
         public DateTime CreditEnd { get; set; }
 
         [DataMember]

@@ -18,5 +18,8 @@ namespace VetService.VetBindingModels
 
         [DataMember]
         public int Count { get; set; }
+
+        [DataMember]
+        public int Price { get; set; }
     }
 }
