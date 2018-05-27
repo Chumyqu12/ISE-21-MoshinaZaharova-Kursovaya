@@ -16,7 +16,7 @@ namespace VetModel
 
         public int Count { get; set; }
 
-        public decimal Price { get; set; }
+        public int Price { get; set; }
 
         public virtual Service Service { get; set; }
 

@@ -9,8 +9,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>VetService</RootNamespace>
     <AssemblyName>VetService</AssemblyName>
-    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -120,6 +121,7 @@
     <Compile Include="VetInterfaces\IServiceService.cs" />
     <Compile Include="VetViewModels\AdminViewModel.cs" />
     <Compile Include="VetViewModels\ClientCreaditViewModel.cs" />
+    <Compile Include="VetViewModels\ClientOrdersViewModel.cs" />
     <Compile Include="VetViewModels\ClientViewModel.cs" />
     <Compile Include="VetViewModels\OrderViewModel.cs" />
     <Compile Include="VetViewModels\PayViewModel.cs" />
